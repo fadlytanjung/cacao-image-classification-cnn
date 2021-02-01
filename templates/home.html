@@ -1,0 +1,101 @@
+{% include "header.html" %}
+      <div class="search-container">
+        <form class="form-container" id="form" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Input data (.jpg/png)</label>
+            <div class="row d-flex " style="align-items: center;">
+              <div class="col-sm-10">
+                <input type="file" class="form-control" name="file" id="search" aria-describedby="emailHelp" placeholder="Type keyword" accept="image/jpeg, image/png">
+              </div>
+              <div class="col-sm-2 text-center">
+                <button type="submit" class="btn btn-primary btn-custom">Process</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div id="result" class="imageresult">
+        <div>
+          <img id="imgGray" src="" />
+          <label>Grayscale Image</label>
+        </div>
+        <div>
+          <img id="imgHsv" src="" />
+          <label>RGB to HSV Image</label>
+        </div>
+        <div>
+          <img id="imgThres" src="" />
+          <label>Treshold Image</label>
+        </div>
+      </div>
+      <div class="d-flex valueresult">
+        <h4 id="classes"></h4>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script src="{{ url_for('static', filename='jquery.min.js')}}"></script>
+<script type="text/javascript">
+  $(function () {
+    var imgGray = false;
+    var imgHsv = false;
+    var imgThres = false;
+    var label = {
+      setengah_matang: 'Setengah Matang',
+      matang: 'Matang',
+      mentah: 'Mentah',
+      busuk: 'Busuk'
+    };
+
+    $('#result').hide();
+    $('#form').submit(function (e) {
+      e.preventDefault();
+      var form_data = new FormData($('form')[0]);
+
+      var file = $('input[name=file]').val();
+      var filename = file.split('.')[1];
+      console.log(filename);
+      $('#img').show(); //<----here
+      if (file == "") {
+        alert("Data tidak boleh kosong")
+        $('#img').hide();
+        return false
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: '/process',
+        contentType: false,
+        processData: false,
+        data: form_data,
+        success: function (res) {
+          //TODO Success
+          $('#result').show();
+          $('#img').hide();
+          imgGray = true;
+          imgHsv = true;
+          imgThres = true;
+
+          if(imgGray){
+            $('#imgGray').attr('src','static/grayscaleImage.'+filename);
+          }
+
+          if (imgHsv) {
+            $('#imgHsv').attr('src', 'static/rgbToHsvImage.' + filename);
+          }
+          
+          if (imgThres) {
+            $('#imgThres').attr('src', 'static/tresholdImage.' + filename);
+          }
+          $('#classes').text('Hasil prediksi: '+ label[res.data]);
+        },
+        error: function (err) {
+          $('#img').hide();
+          console.log(err)
+        }
+      });
+    });
+  });
+</script>
+{% include "footer.html" %}
