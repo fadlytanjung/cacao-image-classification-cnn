@@ -106,9 +106,11 @@ p.description{
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
-  background: #563d7c;
+  background: #01579b;
   margin-left: -15px;
+  position: absolute;
+  top:0;
+  bottom: 0;
 }
 .sidebar img{
   background-color: pink;
@@ -164,4 +166,15 @@ p.description{
 .valueresult{
   justify-content: center;
   margin-top: 20px;
+}
+.imageresultTrain{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.imageresultTrain .imageresult img{
+  width:inherit;
 }

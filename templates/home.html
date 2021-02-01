@@ -28,8 +28,20 @@
           <label>Treshold Image</label>
         </div>
       </div>
+      
       <div class="d-flex valueresult">
-        <h4 id="classes"></h4>
+        <h3 id="classes"></h3>
+      </div>
+      <div id="resultTrain" class="imageresultTrain">
+        <h4>Loss and Accuracy Model</h4>
+        <div class="imageresult">
+          <div>
+            <img id="loss" src="" />
+          </div>
+          <div>
+            <img id="acc" src="" />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -41,6 +53,9 @@
     var imgGray = false;
     var imgHsv = false;
     var imgThres = false;
+    var acc = false;
+    var loss = false;
+
     var label = {
       setengah_matang: 'Setengah Matang',
       matang: 'Matang',
@@ -49,6 +64,7 @@
     };
 
     $('#result').hide();
+    $('#resultTrain').hide();
     $('#form').submit(function (e) {
       e.preventDefault();
       var form_data = new FormData($('form')[0]);
@@ -72,21 +88,30 @@
         success: function (res) {
           //TODO Success
           $('#result').show();
+          $('#resultTrain').show();
           $('#img').hide();
           imgGray = true;
           imgHsv = true;
           imgThres = true;
-
+          acc = true;
+          loss = true;
+          
           if(imgGray){
             $('#imgGray').attr('src','static/grayscaleImage.'+filename);
           }
-
+          
           if (imgHsv) {
             $('#imgHsv').attr('src', 'static/rgbToHsvImage.' + filename);
           }
           
           if (imgThres) {
             $('#imgThres').attr('src', 'static/tresholdImage.' + filename);
+          }
+          if(loss){
+            $('#loss').attr('src', 'static/assets/loss.png');
+          }
+          if(acc){
+            $('#acc').attr('src', 'static/assets/accuracy.png');
           }
           $('#classes').text('Hasil prediksi: '+ label[res.data]);
         },
