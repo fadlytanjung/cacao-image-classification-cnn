@@ -1,0 +1,63 @@
+{% include "header.html" %}
+        <div class="search-container">
+          <button id="train" class="btn btn-primary btn-custom">Train Data</button>
+        </div>
+        <div id="resultTrain" class="imageresultTrain">
+          <h4>Loss and Accuracy Model</h4>
+          <div class="imageresult">
+            <div>
+              <img id="loss" src="" />
+            </div>
+            <div>
+              <img id="acc" src="" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='jquery.min.js')}}"></script>
+<script type="text/javascript">
+  $(function () {
+    var acc = false;
+    var loss = false;
+
+    $('#resultTrain').hide();
+    $('#train').on('click',function (e) {
+      e.preventDefault();
+
+      $('#img').show(); //<----here
+      
+      $.ajax({
+        type: 'POST',
+        url: '/train_process',
+        contentType: false,
+        processData: false,
+        data: {
+          data:'null'
+        },
+        success: function (res) {
+          //TODO Success
+          $('#resultTrain').show();
+          $('#img').hide();
+          acc = true;
+          loss = true;
+
+          if (loss) {
+            $('#loss').attr('src', 'static/assets/loss.png');
+          }
+          if (acc) {
+            $('#acc').attr('src', 'static/assets/accuracy.png');
+          }
+          $('#classes').text('Hasil prediksi: ' + label[res.data]);
+        },
+        error: function (err) {
+          $('#img').hide();
+          console.log(err)
+        }
+      });
+    });
+  });
+</script>
+{% include "footer.html" %}

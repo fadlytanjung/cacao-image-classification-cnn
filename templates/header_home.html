@@ -26,30 +26,3 @@
 <div class="loading" id="img" style="display: none;">
   <img src="{{ url_for('static', filename='loading.gif')}}" id='loading' />"
 </div>
-<div class="container-fluid">
-<div class="row">
-  <div class="col-md-3">
-    <div class="container p-0">
-      <div class="sidebar" style="height: 100vh;">
-        <img class="logo" alt="LOGO" src="{{ url_for('static', filename='usulogo.png')}}"/>
-        <a href="/">
-          <button class="btn {{ 'btn-primary' if data == '/' else '' }} inline-block">Home</button>
-        </a>
-        <a href="/train">
-          <button class="btn {{ 'btn-primary' if data == '/train' else '' }} inline-block">Train</button>
-        </a>
-        <a href="/classification" >
-          <button class="btn {{ 'btn-primary' if data == '/classification' else '' }} inline-block" >Klasifikasi</button>
-        </a>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-9">
-    <div class="container">
-      <div class="heading-info text-center">
-        {% if data != '/train' %}
-        <h2>Klasifikasi Kematangan Buah Kakao Menggunakan CNN</h2>
-        {% else %}
-        <h2>Training dataset untuk menghasilkan model</h2>
-        {% endif %}
-      </div>

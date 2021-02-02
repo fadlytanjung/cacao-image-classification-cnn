@@ -87,6 +87,94 @@ class Api:
         
         return model
 
+    def train(self,model, train_path,validation_path):
+
+        batch_size = 16
+
+        # this is the augmentation configuration we will use for training
+        train_datagen = ImageDataGenerator(
+                rescale=1./255,
+                shear_range=0.2,
+                zoom_range=0.2,
+                horizontal_flip=True)
+
+        # this is the augmentation configuration we will use for testing:
+        # only rescaling
+        test_datagen = ImageDataGenerator(
+                rescale=1./255,
+                shear_range = 0.2,
+                zoom_range = 0.2,
+                horizontal_flip = True)
+
+        # this is a generator that will read pictures found in subfolers of 'data/train', and indefinitely generate
+        # batches of augmented image data
+        train_generator = train_datagen.flow_from_directory(
+                train_path,  # this is the target directory
+                target_size=(300,300),  # all images will be resized to 300x300
+                batch_size=batch_size,
+                class_mode='categorical')  # since we use binary_crossentropy loss, we need binary labels
+
+        # this is a similar generator, for validation data
+        validation_generator = test_datagen.flow_from_directory(
+                validation_path,
+                target_size=(300,300),
+                batch_size=batch_size,
+                class_mode='categorical')
+
+        history_callback = model.fit_generator(
+        train_generator,
+        steps_per_epoch=1000 // batch_size,
+        epochs=100,
+        validation_data=validation_generator,
+        validation_steps=200 // batch_size)
+
+        model.save('data/model.h5')  # always save your weights after training or during training
+
+
+        loss_history = history_callback.history["loss"]
+        accuracy_history = history_callback.history["accuracy"]
+        val_loss_history = history_callback.history["val_loss"]
+        val_accuracy_history = history_callback.history["val_accuracy"]
+
+        numpy_loss_history = np.array(loss_history)
+        np.savetxt("static/assets/loss_history.txt", numpy_loss_history, delimiter=",")
+        #return numpy_loss_history
+        numpy_accuracy_history = np.array(accuracy_history)
+        np.savetxt("static/assets/acc_history.txt", numpy_accuracy_history, delimiter=",")
+
+        numpy_val_loss_history = np.array(val_loss_history)
+        np.savetxt("static/assets/val_loss_history.txt", numpy_val_loss_history, delimiter=",")
+        #return numpy_loss_history
+        numpy_val_accuracy_history = np.array(val_accuracy_history)
+        np.savetxt("static/assets/val_acc_history.txt", numpy_val_accuracy_history, delimiter=",")
+
+        save_grafik(history=history_callback)
+
+        return 'Train Successful'
+
+    def save_grafik(self, history):
+        # summarize history for accuracy
+        plt.plot(history.history['accuracy'])
+        plt.plot(history.history['val_accuracy'])
+        plt.title('model accuracy')
+        plt.ylabel('accuracy')
+        plt.xlabel('epoch')
+        plt.legend(['train', 'test'], loc='upper left')
+        plt.savefig('static/assets/accuracy.png')
+        plt.close()
+
+        # summarize history for loss
+        plt.plot(history.history['loss'])
+        plt.plot(history.history['val_loss'])
+        plt.title('model loss')
+        plt.ylabel('loss')
+        plt.xlabel('epoch')
+        plt.legend(['train', 'test'], loc='upper left')
+        plt.savefig('static/assets/loss.png')
+        plt.close()
+        
+        return "Save Successful"
+
     def loadModel(self, path):
         model_loaded = load_model(path)
         rmsprop = optimizers.RMSprop(lr=0.0001, rho=0.9, epsilon=1e-08, decay=0.0)

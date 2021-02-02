@@ -1,126 +1,48 @@
-{% include "header.html" %}
-      <div class="search-container">
-        <form class="form-container" id="form" enctype="multipart/form-data">
-          <div class="form-group">
-            <label>Input data (.jpg/png)</label>
-            <div class="row d-flex " style="align-items: center;">
-              <div class="col-sm-10">
-                <input type="file" class="form-control" name="file" id="search" aria-describedby="emailHelp" placeholder="Type keyword" accept="image/jpeg, image/png">
-              </div>
-              <div class="col-sm-2 text-center">
-                <button type="submit" class="btn btn-primary btn-custom">Process</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-      <div id="result" class="imageresult">
-        <div>
-          <img id="imgGray" src="" />
-          <label>Grayscale Image</label>
-        </div>
-        <div>
-          <img id="imgHsv" src="" />
-          <label>RGB to HSV Image</label>
-        </div>
-        <div>
-          <img id="imgThres" src="" />
-          <label>Treshold Image</label>
-        </div>
-      </div>
-      
-      <div class="d-flex valueresult">
-        <h3 id="classes"></h3>
-      </div>
-      <div id="resultTrain" class="imageresultTrain">
-        <h4>Loss and Accuracy Model</h4>
-        <div class="imageresult">
-          <div>
-            <img id="loss" src="" />
-          </div>
-          <div>
-            <img id="acc" src="" />
-          </div>
+{% include "header_home.html" %}
+    <div class="container">
+      <div class="contenthome">
+        <h1>Klasifikasi Kematangan Pada Buah Kakao Dengan Menggunakan Metode CNN</h1>
+        <img src="{{ url_for('static', filename='usulogo.png') }}" />
+        <h2>NAME</h2>
+        <h3>NIM</h3>
+
+        <div class="button-content">
+          <a href="/train"><button class="btn btn-success mr-20">Train</button></a>
+          <a href="/classification"><button class="btn btn-success">Klasifikasi</button></a>
         </div>
       </div>
     </div>
-  </div>
-</div>
-</div>
-<script src="{{ url_for('static', filename='jquery.min.js')}}"></script>
-<script type="text/javascript">
-  $(function () {
-    var imgGray = false;
-    var imgHsv = false;
-    var imgThres = false;
-    var acc = false;
-    var loss = false;
+<style>
+  .contenthome{
+    background-color: #dedede;
+    padding:40px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+    overflow-y: hidden !important;
+  }
 
-    var label = {
-      setengah_matang: 'Setengah Matang',
-      matang: 'Matang',
-      mentah: 'Mentah',
-      busuk: 'Busuk'
-    };
+  .contenthome img{
+    width:200px;
+    height: 200px;
+    margin-bottom: 20px;
+  }
 
-    $('#result').hide();
-    $('#resultTrain').hide();
-    $('#form').submit(function (e) {
-      e.preventDefault();
-      var form_data = new FormData($('form')[0]);
+  .contenthome h1,h2,h3{
+    margin-bottom: 20px;
+  }
 
-      var file = $('input[name=file]').val();
-      var filename = file.split('.')[1];
-      console.log(filename);
-      $('#img').show(); //<----here
-      if (file == "") {
-        alert("Data tidak boleh kosong")
-        $('#img').hide();
-        return false
-      }
+  .contenthome button {
+    padding: 15px 10px;
+    width: 120px;
+  }
 
-      $.ajax({
-        type: 'POST',
-        url: '/process',
-        contentType: false,
-        processData: false,
-        data: form_data,
-        success: function (res) {
-          //TODO Success
-          $('#result').show();
-          $('#resultTrain').show();
-          $('#img').hide();
-          imgGray = true;
-          imgHsv = true;
-          imgThres = true;
-          acc = true;
-          loss = true;
-          
-          if(imgGray){
-            $('#imgGray').attr('src','static/grayscaleImage.'+filename);
-          }
-          
-          if (imgHsv) {
-            $('#imgHsv').attr('src', 'static/rgbToHsvImage.' + filename);
-          }
-          
-          if (imgThres) {
-            $('#imgThres').attr('src', 'static/tresholdImage.' + filename);
-          }
-          if(loss){
-            $('#loss').attr('src', 'static/assets/loss.png');
-          }
-          if(acc){
-            $('#acc').attr('src', 'static/assets/accuracy.png');
-          }
-          $('#classes').text('Hasil prediksi: '+ label[res.data]);
-        },
-        error: function (err) {
-          $('#img').hide();
-          console.log(err)
-        }
-      });
-    });
-  });
-</script>
+  .mr-20{
+    margin-right: 15px;
+  }
+</style>
 {% include "footer.html" %}

@@ -120,6 +120,9 @@ p.description{
   height: 200px;
   margin-bottom: 30px;
 }
+.sidebar button{
+  margin-bottom: 15px;
+}
 .inline-block{ 
   width: 280px !important;
 }

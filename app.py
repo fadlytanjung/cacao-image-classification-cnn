@@ -20,10 +20,31 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+@app.route('/classification')
+def classification():
+    path = request.path
+    return render_template('classification.html', data=path)
+
 @app.route('/')
 def home():
     path = request.path
     return render_template('home.html', data=path)
+
+@app.route('/train')
+def train():
+    path = request.path
+    return render_template('train.html', data=path)
+
+@app.route('/train_process', methods=['POST'])
+def train_process():
+    path = request.path
+
+    model = obj.modelCNN()
+    # obj.train(model,'images_after_prepro/train','images_after_prepro/validation')
+    try:
+        return jsonify({ 'code':200, 'message' : 'Success' ,'data':'success'}), 200
+    except e:
+        return jsonify({ 'code':500, 'message' : 'Success', 'error': str(e) }), 500
 
 @app.route('/process',methods=['POST'])
 def classification_process():
