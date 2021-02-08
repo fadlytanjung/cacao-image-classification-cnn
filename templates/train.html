@@ -1,17 +1,32 @@
 {% include "header.html" %}
         <div class="search-container">
-          <button id="train" class="btn btn-primary btn-custom">Train Data</button>
-        </div>
-        <div id="resultTrain" class="imageresultTrain">
-          <h4>Loss and Accuracy Model</h4>
-          <div class="imageresult">
-            <div>
-              <img id="loss" src="" />
-            </div>
-            <div>
-              <img id="acc" src="" />
+          <form class="form-container" id="form" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Input data (.csv)</label>
+            <div class="row d-flex " style="align-items: center;">
+              <div class="col-sm-10">
+                <input type="file" class="form-control" name="file" id="search" aria-describedby="emailHelp" placeholder="Type keyword" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+              </div>
+              <div class="col-sm-2 text-center">
+                <button type="submit" class="btn btn-primary btn-custom">Train Data</button>
+              </div>
             </div>
           </div>
+        </div>
+      </form>
+        <div id="resultTrain" class="imageresultTrain">
+          <h4>Train Data Berhasil !!! <a href="/download">save model</a></h4>
+          <div class="imageresult">
+            <div style="display:flex;flex-direction:column">
+              <img id="loss" src="" />
+              <label>Loss</label>
+            </div>
+            <div style="display:flex;flex-direction:column">
+              <img id="acc" src="" />
+              <label>Accuracy</label>
+            </div>
+          </div>
+         
         </div>
       </div>
     </div>
@@ -24,10 +39,18 @@
     var loss = false;
 
     $('#resultTrain').hide();
-    $('#train').on('click',function (e) {
+    $('#form').on('submit',function (e) {
       e.preventDefault();
+       var form_data = new FormData($('form')[0]);
 
+      var file = $('input[name=file]').val();
+      var filename = file.split('.')[1];
       $('#img').show(); //<----here
+      if (file == "") {
+        alert("Data tidak boleh kosong")
+        $('#img').hide();
+        return false
+      }
       
       $.ajax({
         type: 'POST',

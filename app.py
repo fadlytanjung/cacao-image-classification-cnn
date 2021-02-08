@@ -11,7 +11,7 @@ sys.path.append(os.path.abspath(os.path.join(dir_path, os.pardir)))
 obj = Api()
 
 UPLOAD_FOLDER = 'input/tempData/'
-ALLOWED_EXTENSIONS = set(['png','jpg'])
+ALLOWED_EXTENSIONS = set(['png','jpg','csv'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -90,7 +90,16 @@ def classification_process():
         return jsonify({ 'code':200, 'message' : 'Success' ,'data':predictImage}), 200
     except e:
         return jsonify({ 'code':500, 'message' : 'Success', 'error': str(e) }), 500
-     
+
+@app.route('/download')
+def downloadFile():
+    #For windows you need to use drive name [ex: F:/Example.pdf]
+    data = "data/model_good.h5"
+    resp = make_response(data)
+    resp.headers["Content-Disposition"] = "attachment; filename=model.h5"
+    resp.headers["Content-Type"] = "application/x-hdf;subtype=bag"
+    return resp
+
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
     # port = int(os.environ.get("PORT",5000))
