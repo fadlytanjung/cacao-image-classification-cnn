@@ -25,6 +25,10 @@
               <img id="acc" src="" />
               <label>Accuracy</label>
             </div>
+            <div style="display:flex;flex-direction:column">
+              <img id="cm" src="" />
+              <label>Confusion Matrix</label>
+            </div>
           </div>
          
         </div>
@@ -37,6 +41,7 @@
   $(function () {
     var acc = false;
     var loss = false;
+    var cm = false;
 
     $('#resultTrain').hide();
     $('#form').on('submit',function (e) {
@@ -66,12 +71,15 @@
           $('#img').hide();
           acc = true;
           loss = true;
-
+          cm = true;
           if (loss) {
             $('#loss').attr('src', 'static/assets/loss.png');
           }
           if (acc) {
             $('#acc').attr('src', 'static/assets/accuracy.png');
+          }
+          if (cm) {
+            $('#cm').attr('src', 'static/assets/confusion_matrix.png');
           }
           $('#classes').text('Hasil prediksi: ' + label[res.data]);
         },

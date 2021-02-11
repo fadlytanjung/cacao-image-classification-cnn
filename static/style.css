@@ -159,11 +159,11 @@ p.description{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 90%;
+  width: 100%;
 }
 
-.imageresult img{
-  width: 300px;
+.imageresult div > img{
+  width: 100%;
 }
 
 .valueresult{
@@ -178,6 +178,6 @@ p.description{
   text-align: center;
 }
 
-.imageresultTrain .imageresult img{
+/* .imageresultTrain .imageresult img{
   width:inherit;
-}
+} */
