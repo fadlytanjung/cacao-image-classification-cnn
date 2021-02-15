@@ -4,6 +4,7 @@ import pandas as pd
 from Api import Api
 import sys, os
 import time
+import os.path
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dir_path, os.pardir)))
@@ -51,8 +52,10 @@ def train_process():
 
     model = obj.modelCNN()
     # obj.train(model,'images_after_prepro/train','images_after_prepro/validation')
+    print("last modified: %s" % time.ctime(os.path.getmtime('data/model_new.h5')))
+    print("created: %s" % time.ctime(os.path.getctime('data/model_new.h5')))
     try:
-        return jsonify({ 'code':200, 'message' : 'Success' ,'data':'success'}), 200
+        return jsonify({ 'code':200, 'message' : 'Success' ,'data':'success','updated': "Last Model Updated: %s" % time.ctime(os.path.getmtime('data/model_new.h5'))}), 200
     except e:
         return jsonify({ 'code':500, 'message' : 'Success', 'error': str(e) }), 500
 

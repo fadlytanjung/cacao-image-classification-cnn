@@ -52,6 +52,13 @@
       busuk: 'Busuk'
     };
 
+    var segmentation = {
+      busuk:0,
+      matang:1,
+      mentah:2,
+      setengah_matang:3,
+    };
+
     $('#result').hide();
     $('#resultTrain').hide();
     $('#form').submit(function (e) {
@@ -102,7 +109,7 @@
           if(acc){
             $('#acc').attr('src', 'static/assets/accuracy.png');
           }
-          $('#classes').text('Hasil prediksi: '+ label[res.data]);
+          $('#classes').text('Hasil prediksi: '+ label[res.data]+' | Nilai Segmentasi: '+ segmentation[res.data]);
         },
         error: function (err) {
           $('#img').hide();

@@ -16,6 +16,7 @@
       </form>
         <div id="resultTrain" class="imageresultTrain">
           <h4>Train Data Berhasil !!! <a href="/download">save model</a></h4>
+          <p id="lastUpdated"></p>
           <div class="imageresult">
             <div style="display:flex;flex-direction:column">
               <img id="loss" src="" />
@@ -44,6 +45,7 @@
     var cm = false;
 
     $('#resultTrain').hide();
+    $('#lastUpdated').empty();
     $('#form').on('submit',function (e) {
       e.preventDefault();
        var form_data = new FormData($('form')[0]);
@@ -81,7 +83,7 @@
           if (cm) {
             $('#cm').attr('src', 'static/assets/confusion_matrix.png');
           }
-          $('#classes').text('Hasil prediksi: ' + label[res.data]);
+          $('#lastUpdated').text(res.updated);
         },
         error: function (err) {
           $('#img').hide();

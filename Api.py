@@ -200,6 +200,7 @@ class Api:
         img_tensor = np.expand_dims(img_tensor, axis=0)         # (1, height, width, channels), add a dimension because the model expects this shape: (batch_size, height, width, channels)
         # predImg = np.argmax(model.predict_classes(pathImg), axis=-1)
         predImg = model.predict_classes(img_tensor)
+        print('value sermentation: ',np.argmax(model.predict(img_tensor), axis=-1))
         print('result',predImg)
         
         result = None
